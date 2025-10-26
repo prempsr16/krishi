@@ -1,0 +1,8 @@
+{
+  "name": "KrishiGPT",
+  "description": "An intelligent dashboard for farmers providing crop diagnosis, market insights, and farming tips powered by AI. KrishiGPT assists farmers by diagnosing crop issues, recommending solutions, showing nearby markets, and tracking crop health — all inside an easy-to-use, image-rich dashboard.",
+  "requestFramePermissions": [
+    "microphone",
+    "camera"
+  ]
+}
