@@ -1,7 +1,8 @@
-
-import React from 'react';
+import React, { useContext } from 'react';
 import type { DiagnosisReport } from '../types';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LanguageContext } from '../App';
+
 
 interface MyReportsProps {
   reports: DiagnosisReport[];
@@ -24,10 +25,11 @@ const severityStyles = {
 };
 
 const MyReports: React.FC<MyReportsProps> = ({ reports }) => {
+  const { t } = useContext(LanguageContext);
   return (
     <div className="p-4 md:p-8 space-y-8">
       <div className="bg-white p-6 rounded-xl shadow-md">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Crop Health Trend</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">{t('Crop Health Trend')}</h2>
         <div style={{ width: '100%', height: 300 }}>
             <ResponsiveContainer>
                 <BarChart data={healthData}>
@@ -36,16 +38,16 @@ const MyReports: React.FC<MyReportsProps> = ({ reports }) => {
                     <YAxis domain={[0, 100]} />
                     <Tooltip />
                     <Legend />
-                    <Bar dataKey="healthScore" fill="#4ade80" name="Crop Health Score (%)" />
+                    <Bar dataKey="healthScore" fill="#4ade80" name={t('Crop Health Score (%)')} />
                 </BarChart>
             </ResponsiveContainer>
         </div>
       </div>
 
       <div className="bg-white p-6 rounded-xl shadow-md">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Diagnosis History</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">{t('Diagnosis History')}</h2>
         {reports.length === 0 ? (
-          <p className="text-gray-500">You have no saved reports. Diagnose a crop to see it here.</p>
+          <p className="text-gray-500">{t('You have no saved reports. Diagnose a crop to see it here.')}</p>
         ) : (
           <div className="space-y-4">
             {reports.map((report) => (

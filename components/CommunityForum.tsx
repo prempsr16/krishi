@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import type { ForumPost } from '../types';
+import { LanguageContext } from '../App';
 
 const initialPosts: ForumPost[] = [
     {
@@ -40,6 +41,7 @@ const initialPosts: ForumPost[] = [
 const CommunityForum: React.FC = () => {
   const [posts, setPosts] = useState<ForumPost[]>(initialPosts);
   const [newPostContent, setNewPostContent] = useState('');
+  const { t } = useContext(LanguageContext);
 
   const handlePostSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -47,8 +49,8 @@ const CommunityForum: React.FC = () => {
 
     const newPost: ForumPost = {
       id: new Date().toISOString(),
-      author: 'You', // In a real app, this would be the logged-in user
-      timestamp: 'Just now',
+      author: t('You'), // In a real app, this would be the logged-in user
+      timestamp: t('Just now'),
       content: newPostContent,
       likes: 0,
       comments: [],
@@ -60,7 +62,7 @@ const CommunityForum: React.FC = () => {
 
   return (
     <div className="p-4 md:p-8 max-w-4xl mx-auto">
-      <h2 className="text-3xl font-bold text-gray-800 mb-6">Community Forum</h2>
+      <h2 className="text-3xl font-bold text-gray-800 mb-6">{t('Community Forum')}</h2>
 
       {/* New Post Form */}
       <div className="bg-white p-4 rounded-xl shadow-md mb-8">
@@ -70,11 +72,11 @@ const CommunityForum: React.FC = () => {
             onChange={(e) => setNewPostContent(e.target.value)}
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
             rows={3}
-            placeholder="Share an update or ask a question..."
+            placeholder={t('Share an update or ask a question...')}
           ></textarea>
           <div className="flex justify-end mt-2">
             <button type="submit" className="bg-green-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-green-700 transition duration-300 disabled:bg-gray-400" disabled={!newPostContent.trim()}>
-              Post
+              {t('Post')}
             </button>
           </div>
         </form>
@@ -98,8 +100,8 @@ const CommunityForum: React.FC = () => {
               <img src={post.imageUrl} alt="User upload" className="rounded-lg w-full max-h-80 object-cover mb-4" />
             )}
             <div className="flex items-center space-x-4 text-gray-500 text-sm border-b pb-3 mb-3">
-              <button className="hover:text-green-600">👍 {post.likes} Likes</button>
-              <button className="hover:text-green-600">💬 {post.comments.length} Comments</button>
+              <button className="hover:text-green-600">👍 {post.likes} {t('Likes')}</button>
+              <button className="hover:text-green-600">💬 {post.comments.length} {t('Comments')}</button>
             </div>
             <div className="space-y-3">
               {post.comments.map((comment, index) => (

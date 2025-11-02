@@ -1,6 +1,6 @@
-
-import React from 'react';
+import React, { useContext } from 'react';
 import type { MarketPrice } from '../types';
+import { LanguageContext } from '../App';
 
 const marketData: MarketPrice[] = [
   { crop: 'Tomato', market: 'Pune APMC', distance: 4.2, price: 28 },
@@ -16,18 +16,19 @@ const openGoogleMaps = (query: string) => {
 }
 
 const MarketInsights: React.FC = () => {
+  const { t } = useContext(LanguageContext);
   return (
     <div className="p-4 md:p-8 space-y-8">
         <div className="bg-white p-6 rounded-xl shadow-md">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Nearby Market Prices</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">{t('Nearby Market Prices')}</h2>
             <div className="overflow-x-auto">
                 <table className="w-full text-left table-auto">
                     <thead className="bg-gray-50 border-b">
                         <tr>
-                            <th className="px-4 py-2 font-semibold text-gray-600">Crop</th>
-                            <th className="px-4 py-2 font-semibold text-gray-600">Market</th>
-                            <th className="px-4 py-2 font-semibold text-gray-600">Distance (km)</th>
-                            <th className="px-4 py-2 font-semibold text-gray-600">Price (₹/kg)</th>
+                            <th className="px-4 py-2 font-semibold text-gray-600">{t('Crop')}</th>
+                            <th className="px-4 py-2 font-semibold text-gray-600">{t('Market')}</th>
+                            <th className="px-4 py-2 font-semibold text-gray-600">{t('Distance (km)')}</th>
+                            <th className="px-4 py-2 font-semibold text-gray-600">{t('Price (₹/kg)')}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,15 +46,15 @@ const MarketInsights: React.FC = () => {
         </div>
 
         <div className="bg-white p-6 rounded-xl shadow-md">
-            <h2 className="text-2xl font-bold text-gray-800 mb-4">Find Local Resources</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">{t('Find Local Resources')}</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <button onClick={() => openGoogleMaps('nearby market yards')} className="bg-blue-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-600 transition duration-300 flex items-center justify-center space-x-2">
                     <span>🗺️</span>
-                    <span>Find Nearest Market Yards</span>
+                    <span>{t('Find Nearest Market Yards')}</span>
                 </button>
                  <button onClick={() => openGoogleMaps('fertilizer and pesticide shops near me')} className="bg-orange-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-orange-600 transition duration-300 flex items-center justify-center space-x-2">
                     <span>🧪</span>
-                    <span>Find Fertilizer/Pesticide Shops</span>
+                    <span>{t('Find Fertilizer/Pesticide Shops')}</span>
                 </button>
             </div>
         </div>

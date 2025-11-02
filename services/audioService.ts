@@ -1,5 +1,8 @@
 
-function decode(base64: string): Uint8Array {
+
+let currentAudio: { source: AudioBufferSourceNode, context: AudioContext } | null = null;
+
+export function decode(base64: string): Uint8Array {
   const binaryString = atob(base64);
   const len = binaryString.length;
   const bytes = new Uint8Array(len);
@@ -9,7 +12,16 @@ function decode(base64: string): Uint8Array {
   return bytes;
 }
 
-async function decodeAudioData(
+export function encode(bytes: Uint8Array): string {
+  let binary = '';
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
+}
+
+export async function decodeAudioData(
   data: Uint8Array,
   ctx: AudioContext,
   sampleRate: number,
@@ -28,9 +40,15 @@ async function decodeAudioData(
   return buffer;
 }
 
-const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
+export const playAudio = async (base64Audio: string, onEnded: () => void) => {
+  if (currentAudio) {
+    currentAudio.source.stop();
+    if (currentAudio.context.state !== 'closed') {
+        currentAudio.context.close();
+    }
+  }
 
-export const playAudio = async (base64Audio: string) => {
+  const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)({ sampleRate: 24000 });
   try {
     const decodedData = decode(base64Audio);
     const audioBuffer = await decodeAudioData(decodedData, audioContext, 24000, 1);
@@ -38,8 +56,26 @@ export const playAudio = async (base64Audio: string) => {
     const source = audioContext.createBufferSource();
     source.buffer = audioBuffer;
     source.connect(audioContext.destination);
+    
+    currentAudio = { source, context: audioContext };
+
+    source.onended = () => {
+      if (currentAudio && currentAudio.source === source) {
+        currentAudio = null;
+      }
+      onEnded();
+    };
+
     source.start();
   } catch (error) {
     console.error("Failed to play audio:", error);
+    onEnded(); // Ensure state is reset on error
   }
 };
+
+export const stopAudio = () => {
+    if (currentAudio) {
+        currentAudio.source.stop();
+        // The onended callback will handle cleanup
+    }
+}
